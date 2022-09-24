@@ -9,11 +9,6 @@ public class StarRotate : MonoBehaviour
     public float rotationSpeed;
     public Vector3 rotationDirection;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
     // Update is called once per frame
     void Update()
     {

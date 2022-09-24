@@ -7,16 +7,14 @@ using UnityEngine.UI;
 
 public class SpawnManager : MonoBehaviour
 {
-    public GameObject boost;
-
-    public GameObject enemy;
-
     private float xRange = 8.0f;
-
     private float zBound = 30.0f;
-
     private bool isGameActive;
+    private int boostRate = 5;
+    private float enemyRate = 4.0f;
 
+    public GameObject boost;
+    public GameObject enemy;
     public GameObject titleScreen;
     public GameObject finalScreen;
     public TextMeshProUGUI scoreText;
@@ -30,25 +28,20 @@ public class SpawnManager : MonoBehaviour
     {
         _playerController = GameObject.Find("Player").GetComponent<PlayerController>();
     }
-    public void StartSpawning()
+    public void StartSpawning(float difficulty)
     {
+        enemyRate /= difficulty;
         isGameActive = true;
         StartCoroutine(SpawnBoosts());
         StartCoroutine(SpawnEnemy());
         titleScreen.gameObject.SetActive(false);
     }
-    //переписать спавн противников на корутины, чтобы можно было их стопать, когда в playercontroller кол жизней упадет до нуля
-    // для этого создать отдельный метод StopSpawning и там сделать StopCoroutine
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
+    
     IEnumerator SpawnBoosts()
     {
         while (isGameActive == true)
         {
-            yield return new WaitForSeconds(4);
+            yield return new WaitForSeconds(boostRate);
             float xCoordinate = Random.Range(-xRange, xRange);
             Vector3 spawnPos = new Vector3(xCoordinate, boost.transform.position.y, zBound);
 
@@ -60,7 +53,7 @@ public class SpawnManager : MonoBehaviour
     {
         while (isGameActive == true)
         {
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(enemyRate);
             float xCoordinate = Random.Range(-xRange, xRange);
             Vector3 spawnPos = new Vector3(xCoordinate, boost.transform.position.y, zBound);
 

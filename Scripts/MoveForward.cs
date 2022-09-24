@@ -7,6 +7,9 @@ public class MoveForward : MonoBehaviour
     public float speed;
     private float zUpBoundry = 30;
     private float zDownBoundary = -10;
+    private int killingScore = 7;
+    private int loseBoostScore = -1;
+    private int loseEnemyScore = -5;
     public ParticleSystem explosionFx;
 
     private SpawnManager _spawnManager;
@@ -19,9 +22,16 @@ public class MoveForward : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.forward * speed * Time.deltaTime, Space.World);
+        transform.Translate(Vector3.forward * (speed * Time.deltaTime), Space.World);
         if (transform.position.z > zUpBoundry || transform.position.z < zDownBoundary)
         {
+            if (gameObject.CompareTag("Enemy"))
+            {
+                _spawnManager.UpdateScore(loseEnemyScore);
+            } else if (gameObject.CompareTag("Boost"))
+            {
+                _spawnManager.UpdateScore(loseBoostScore);
+            }
             Destroy(gameObject);
         }
     }
@@ -37,7 +47,7 @@ public class MoveForward : MonoBehaviour
             Destroy(gameObject);
             Destroy(other.gameObject);
             Explode();
-            _spawnManager.UpdateScore(7);
+            _spawnManager.UpdateScore(killingScore);
         }
     }
 }

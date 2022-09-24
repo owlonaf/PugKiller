@@ -132,7 +132,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 25
   explosionFx: {fileID: 19811986, guid: 6636b3078b0905e489f698a11b7a6b6b, type: 3}
-  ForceMode: 5
 --- !u!114 &-3562485220393817818
 MonoBehaviour:
   m_ObjectHideFlags: 0

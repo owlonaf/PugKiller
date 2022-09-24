@@ -10,17 +10,18 @@ public class PlayerController : MonoBehaviour
     public float vAcceleration = 100;
     public float hAcceleration = 150;
     public GameObject playerAmmo;
-
-    // private Vector3 startPos = new Vector3(0, 0.5f, 1);
-    private Rigidbody playerRb;
-    private float zDownBound = -2.0f;
-    private float zUpBound = 4.0f;
-    private float outsidePlayerAddition = 1.0f;
     public int lifesAmount = 3;
     public ParticleSystem enemyParticle;
     public ParticleSystem boostParticle;
     public bool isGameActive;
+    
+    private Rigidbody playerRb;
+    private float zDownBound = -2.0f;
+    private float zUpBound = 4.0f;
+    private float outsidePlayerAddition = 1.0f;
     private SpawnManager _spawnManager;
+    private int collidePugScore = -5;
+    private int pickBoostScore = 10;
 
     // Start is called before the first frame update
     void Start()
@@ -36,10 +37,6 @@ public class PlayerController : MonoBehaviour
         MovePlayer();
         ShootProjectile();
         ConstrainPlayerPosition();
-        // if (isGameActive == false)
-        // {
-        //     GameObject.Find("SpawnManager").GetComponent<SpawnManager>().StopSpawning();
-        // }
     }
 
     void MovePlayer()
@@ -47,8 +44,6 @@ public class PlayerController : MonoBehaviour
         float verticalInput = Input.GetAxis("Vertical");
         float horizontalInput = Input.GetAxis("Horizontal");
 
-        // transform.Translate(Vector3.forward * hMaxSpeed * Time.deltaTime * verticalInput, Space.World);
-        // transform.Translate(Vector3.right * hMaxSpeed * Time.deltaTime * horizontalInput, Space.World);
         if (MathF.Abs(playerRb.velocity.z)  < vMaxSpeed)
         {
             playerRb.AddForce(Vector3.forward * (vAcceleration * verticalInput));
@@ -90,7 +85,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("You were fucked");
             Explode(enemyParticle, collision.gameObject.transform.position);
             Destroy(collision.gameObject);
-            _spawnManager.UpdateScore(-5);
+            _spawnManager.UpdateScore(collidePugScore);
             lifesAmount -= 1;
             _spawnManager.UpdateLifes();
             if (lifesAmount == 0)
@@ -106,12 +101,12 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(other.gameObject);
             Explode(boostParticle, other.gameObject.transform.position);
-            _spawnManager.UpdateScore(10);
+            _spawnManager.UpdateScore(pickBoostScore);
         }
     }
 
-    public void Explode(ParticleSystem particleSystem, Vector3 position)
+    public void Explode(ParticleSystem particleForExplode, Vector3 position)
     {
-        Instantiate(particleSystem, position, particleSystem.transform.rotation);
+        Instantiate(particleForExplode, position, particleForExplode.transform.rotation);
     }
 }

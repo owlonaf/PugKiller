@@ -7,6 +7,8 @@ public class StartBtnScr : MonoBehaviour
 {
     private Button _startBtn;
 
+    public float difficulty;
+
     private SpawnManager _spawnManager;
     // Start is called before the first frame update
     void Start()
@@ -24,7 +26,7 @@ public class StartBtnScr : MonoBehaviour
 
     void SetDifficulty()
     {
-        _spawnManager.StartSpawning();
+        _spawnManager.StartSpawning(difficulty);
         Debug.Log(_startBtn.gameObject.name);
     }
 }
